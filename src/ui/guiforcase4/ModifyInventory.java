@@ -101,7 +101,7 @@ public class ModifyInventory extends JFrame {
       public void actionPerformed(ActionEvent actionEvent) {
         VehicleManagerImpl vmi =new VehicleManagerImpl();
         modifyV.setPrice(Float.parseFloat(tf6.getText()));
-        modifyV.setPrice(Integer.parseInt(tf7.getText()));
+        modifyV.setMileage(Integer.parseInt(tf7.getText()));
         vmi.updateVehicle(modifyV);
         new InventoryInformation(dID);
         frame.dispose();
