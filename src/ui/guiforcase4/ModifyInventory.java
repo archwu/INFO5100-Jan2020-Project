@@ -1,6 +1,7 @@
 package ui.guiforcase4;
 
 import dto.Vehicle;
+import persist.VehicleManagerImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,12 +73,11 @@ public class ModifyInventory extends JFrame {
     JTextField tf6 = new JTextField(10);
     tf6.setBounds(160, 230, 160, 25);
     tf6.setText(Float.toString(modifyV.getPrice()));
+
     JTextField tf7 = new JTextField(10);
     tf7.setBounds(160, 290, 160, 25);
     tf7.setText(Integer.toString(modifyV.getMileage()));
-    /*JTextField tf8 = new JTextField(10);
-    tf8.setBounds(160, 320, 160, 25);*/
-    //tf9.setText(Image.toString(modifyV.getImage()));
+
     JTextField[] jtfs = new JTextField[]{tf1, tf2, tf3, tf4, tf5,tf6,tf7};
     for (int i = 0; i < jtfs.length; i++) {
       jtfs[i].setFont(new Font("Arial", Font.PLAIN, 15));
@@ -96,6 +96,17 @@ public class ModifyInventory extends JFrame {
       jButtons[i].setFont(new Font("Arial", Font.PLAIN, 15));
       panel.add(jButtons[i]);
     }
+    btn1.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent) {
+        VehicleManagerImpl vmi =new VehicleManagerImpl();
+        modifyV.setPrice(Float.parseFloat(tf6.getText()));
+        modifyV.setPrice(Integer.parseInt(tf7.getText()));
+        vmi.updateVehicle(modifyV);
+        new InventoryInformation(dID);
+        frame.dispose();
+      }
+    });
     btn2.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -122,14 +133,6 @@ public class ModifyInventory extends JFrame {
     panel.add(cmb1);
     panel.add(cmb2);
 
-
-   /* JComboBox make = new JComboBox();
-    make.setBounds(160, 110, 160, 25);
-    JComboBox model = new JComboBox();
-    model.setBounds(160, 140, 160, 25);
-    makeModel(make, model);
-    panel.add(make);
-    panel.add(model);*/
   }
 
   private void makeModel(JComboBox make, JComboBox model) {
