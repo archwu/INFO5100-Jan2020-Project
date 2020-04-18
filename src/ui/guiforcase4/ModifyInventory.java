@@ -103,6 +103,7 @@ public class ModifyInventory extends JFrame {
         modifyV.setPrice(Float.parseFloat(tf6.getText()));
         modifyV.setMileage(Integer.parseInt(tf7.getText()));
         vmi.updateVehicle(modifyV);
+        JOptionPane.showMessageDialog(panel, "Vehicle " + modifyV.getVehicleId() + " has been updated");
         new InventoryInformation(dID);
         frame.dispose();
       }
