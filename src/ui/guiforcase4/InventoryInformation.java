@@ -33,21 +33,40 @@ public class InventoryInformation extends JFrame {
     this.dID = dID;
     vmi = new VehicleManagerImpl();
     create();
+    populate();
+    sorter();
     initialFrame();
   }
 
   private void create() {
-    VehicleManagerImpl vmi = new VehicleManagerImpl();
     table = new JTable(vModel);
     String header[] = new String[]{"VehicleID", "VIN", "Make", "Model", "Price", "Mileage"};
     vModel.setColumnIdentifiers(header);
     table.setModel(vModel);
-    table.setAutoCreateRowSorter(true);
+
+    /*table.setModel(new DefaultTableModel(){
+      Class[] types = { Integer.class, Integer.class, String.class, String.class, Float.class, Integer.class };
+
+      @Override
+      public Class getColumnClass(int columnIndex) {
+        return this.types[columnIndex];
+      }
+    });*/
+    table.setEnabled(false);
+  }
+
+  private void populate(){
     table.getTableHeader().setFont(new Font("Arial", PLAIN, 15));
     Collection<Vehicle> veh = vmi.getVehiclesBasedOnDealerId(dID);
     for (Vehicle v : veh) {
       vModel.addRow(new Object[]{v.getVehicleId(), v.getVin(), v.getMake(), v.getModel(), v.getPrice(), v.getMileage()});
     }
+  }
+
+  private void sorter(){
+    TableRowSorter<DefaultTableModel> sorter=new TableRowSorter<DefaultTableModel>(vModel);
+    table.setRowSorter(sorter);
+
   }
 
   private void initialFrame() {
@@ -82,13 +101,13 @@ public class InventoryInformation extends JFrame {
     //table.setCellRenderer(renderer);
     panel.add(js);
     JButton btn1 = new JButton("Modify");
-    btn1.setBounds(120, 320, 120, 40);
+    btn1.setBounds(80, 320, 160, 40);
     JButton btn2 = new JButton("Delete");
-    btn2.setBounds(320, 320, 120, 40);
+    btn2.setBounds(319, 320, 160, 40);
     JButton btn3 = new JButton("Add Vehicles");
-    btn3.setBounds(120, 380, 120, 40);
+    btn3.setBounds(80, 380, 160, 40);
     JButton btn4 = new JButton("Back");
-    btn4.setBounds(320, 380, 120, 40);
+    btn4.setBounds(319, 380, 160, 40);
     JButton[] jButtons = new JButton[]{btn1, btn2, btn3, btn4};
     Dimension preferredSize = new Dimension(120, 40);
     for (JButton jButton : jButtons) {
