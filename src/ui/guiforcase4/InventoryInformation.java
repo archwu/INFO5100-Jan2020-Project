@@ -2,76 +2,52 @@ package ui.guiforcase4;
 
 import dto.Vehicle;
 import persist.VehicleManagerImpl;
+import service.SearchFilter;
+import service.SearchFilterElement;
+import service.VehicleSearchFilter;
+import service.VehicleSearchFilterElement;
+
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
-import static java.awt.Font.PLAIN;
+import java.util.List;
+import java.util.Vector;
 
 import static java.awt.Font.PLAIN;
 
 public class InventoryInformation extends JFrame {
   int dID;
+  //Use JTable to show the related info of that vehicle
   private JTable table;
   private VehicleManagerImpl vmi;
+  DefaultTableModel vModel = new DefaultTableModel();
 
-  DefaultTableModel vModel = new DefaultTableModel(){
-    Class[] types = { Integer.class, Integer.class, String.class, String.class, Float.class, Integer.class };
-    boolean[] canEdit = new boolean [] {
-            false, false, false, false, false, false
-    };
-
-    @Override
-    public Class getColumnClass(int columnIndex) {
-      return this.types[columnIndex];
-    }
-
-    // This override is just for avoid editing the content of my JTable.
-    @Override
-    public boolean isCellEditable(int row, int column) {
-      return false;
-    }
-  };
 
   public InventoryInformation(int dID) {
     this.dID = dID;
     vmi = new VehicleManagerImpl();
     create();
-    populate();
-    position();
     initialFrame();
   }
 
   private void create() {
+    VehicleManagerImpl vmi = new VehicleManagerImpl();
     table = new JTable(vModel);
     String header[] = new String[]{"VehicleID", "VIN", "Make", "Model", "Price", "Mileage"};
     vModel.setColumnIdentifiers(header);
     table.setModel(vModel);
     table.setAutoCreateRowSorter(true);
-  }
-
-  private void populate(){
     table.getTableHeader().setFont(new Font("Arial", PLAIN, 15));
     Collection<Vehicle> veh = vmi.getVehiclesBasedOnDealerId(dID);
     for (Vehicle v : veh) {
       vModel.addRow(new Object[]{v.getVehicleId(), v.getVin(), v.getMake(), v.getModel(), v.getPrice(), v.getMileage()});
     }
-  }
-
-  private void position(){
-    DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
-    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-    leftRenderer.setHorizontalAlignment(DefaultTableCellRenderer.LEFT);
-    centerRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
-    table.getColumn("VehicleID").setCellRenderer( centerRenderer );
-    table.getColumn("VIN").setCellRenderer( centerRenderer );
-    table.getColumn("Make").setCellRenderer( centerRenderer );
-    table.getColumn("Model").setCellRenderer( centerRenderer );
-    table.getColumn("Price").setCellRenderer( centerRenderer );
-    table.getColumn("Mileage").setCellRenderer( centerRenderer );
   }
 
   private void initialFrame() {
@@ -93,7 +69,7 @@ public class InventoryInformation extends JFrame {
     jl.setHorizontalAlignment(JTextField.CENTER);
     jl.setBounds(140, 15, 280, 30);
     panel.add(jl);
-    //Show the VehicleTable based on DealerID
+    //(Ekie)Show the VehicleTable based on DealerID
     JScrollPane js = new JScrollPane(table);
     js.setBounds(80, 60, 400, 250);
     js.setBackground(Color.LIGHT_GRAY);
@@ -105,21 +81,15 @@ public class InventoryInformation extends JFrame {
     renderer.setHorizontalAlignment(SwingConstants.CENTER);
     //table.setCellRenderer(renderer);
     panel.add(js);
-
-    JButton modifyBtn = new JButton("Modify");
-    modifyBtn.setBounds(80, 320, 160, 40);
-
-    JButton deleteBtn = new JButton("Delete");
-    deleteBtn.setBounds(319, 320, 160, 40);
-
-    JButton addBtn = new JButton("Add Vehicles");
-    addBtn.setBounds(80, 380, 160, 40);
-
-    JButton backBtn = new JButton("Back");
-    backBtn.setBounds(319, 380, 160, 40);
-
-    JButton[] jButtons = new JButton[]{modifyBtn, deleteBtn, addBtn, backBtn};
-
+    JButton btn1 = new JButton("Modify");
+    btn1.setBounds(120, 320, 120, 40);
+    JButton btn2 = new JButton("Delete");
+    btn2.setBounds(320, 320, 120, 40);
+    JButton btn3 = new JButton("Add Vehicles");
+    btn3.setBounds(120, 380, 120, 40);
+    JButton btn4 = new JButton("Back");
+    btn4.setBounds(320, 380, 120, 40);
+    JButton[] jButtons = new JButton[]{btn1, btn2, btn3, btn4};
     Dimension preferredSize = new Dimension(120, 40);
     for (JButton jButton : jButtons) {
       jButton.setPreferredSize(preferredSize);
@@ -129,27 +99,30 @@ public class InventoryInformation extends JFrame {
       panel.add(jButton);
     }
 
-    modifyBtn.addActionListener(e -> {
-      //Get the VehicleID selected vehicle
-      try {
-        int rowIndex = table.getSelectedRow();
-        int vehID = (int) table.getValueAt(rowIndex, 0);
-        Collection<Vehicle> veh = vmi.getVehiclesBasedOnDealerId(dID);
-        Vehicle modifyV = new Vehicle();
-        for (Vehicle v : veh) {
-          if (v.getVehicleId() == vehID) {
-            modifyV = v;
+    btn1.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        //Get the VehicleID selected vehicle
+        try {
+          int rowIndex = table.getSelectedRow();
+          int vehID = (int) table.getValueAt(rowIndex, 0);
+          Collection<Vehicle> veh = vmi.getVehiclesBasedOnDealerId(dID);
+          Vehicle modifyV = new Vehicle();
+          for (Vehicle v : veh) {
+            if (v.getVehicleId() == vehID) {
+              modifyV = v;
+            }
           }
+          new ModifyInventory(modifyV);
+          frame.dispose();
+        } catch (Exception ex) {
+          JOptionPane.showMessageDialog(panel, "Please select one vehicle to modify!");
         }
-        new ModifyInventory(modifyV);
-        frame.dispose();
-      } catch (Exception ex) {
-        JOptionPane.showMessageDialog(panel, "Please select one vehicle to modify!");
-      }
 
+      }
     });
     //(Ekie)Delete vehicles
-    deleteBtn.addActionListener(e -> {
+    btn2.addActionListener(e -> {
       try {
         //Step1: Delete the vehicle from the db
         int rowIndex = (int) table.getSelectedRow();
@@ -169,26 +142,33 @@ public class InventoryInformation extends JFrame {
         vModel.removeRow(rowIndex);
         int size = vModel.getRowCount();
         if (size == 0) { //No vehicles left, disable delete.
-          deleteBtn.setEnabled(false);
+          btn2.setEnabled(false);
         } else { //Select an index.
           if (rowIndex == size) {
             rowIndex--;
           }
+        /*table.setSelectedIndex(index);
+        table.ensure;*/
         }
       } catch (Exception ex) {
         JOptionPane.showMessageDialog(panel, "Please select one vehicle to delete!");
       }
     });
 
-    addBtn.addActionListener(e -> {
-      new AddVehicles(dID);
-      frame.dispose();
+    btn3.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        new AddVehicles(dID);
+        frame.dispose();
+      }
     });
 
-    backBtn.addActionListener(e -> {
-      frame.dispose();
-      new OperationOptions(dID);
+    btn4.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        frame.dispose();
+        new OperationOptions(dID);
+      }
     });
   }
 }
-
