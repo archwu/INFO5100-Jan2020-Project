@@ -117,22 +117,30 @@ public class ModifyInventory extends JFrame {
       public void actionPerformed(ActionEvent actionEvent) {
         VehicleManagerImpl vmi =new VehicleManagerImpl();
         try {
-          if(Integer.parseInt(tf2.getText())<10000 & Integer.parseInt(tf2.getText())>0)
-          {
-            modifyV.setVin(Integer.parseInt(tf2.getText()));
-            modifyV.setPrice(Float.parseFloat(tf6.getText()));
-            modifyV.setMileage(Integer.parseInt(tf7.getText()));
-            modifyV.setColor((String) cmb1.getSelectedItem());
-            modifyV.setCategory((String)cmb2.getSelectedItem());
-            vmi.updateVehicle(modifyV);
-            JOptionPane.showMessageDialog(panel, "Vehicle " + modifyV.getVehicleId() + " has been updated");
-            new InventoryInformation(dID);
-            frame.dispose();
+          if(Integer.parseInt(tf2.getText())<10000 & Integer.parseInt(tf2.getText())>0){
+            if(Float.parseFloat(tf6.getText())>0){
+              if(Integer.parseInt(tf7.getText())>=0){
+                modifyV.setVin(Integer.parseInt(tf2.getText()));
+                modifyV.setPrice(Float.parseFloat(tf6.getText()));
+                modifyV.setMileage(Integer.parseInt(tf7.getText()));
+                modifyV.setColor((String) cmb1.getSelectedItem());
+                modifyV.setCategory((String)cmb2.getSelectedItem());
+                vmi.updateVehicle(modifyV);
+                JOptionPane.showMessageDialog(panel, "Vehicle " + modifyV.getVehicleId() + " has been updated");
+                new InventoryInformation(dID);
+                frame.dispose();
+              }
+              else{
+                JOptionPane.showMessageDialog(panel, "Please enter the correct mileage");
+              }
+            }
+            else{
+              JOptionPane.showMessageDialog(panel, "Please enter the correct price");
+            }
           }
           else{
             JOptionPane.showMessageDialog(panel, "Please enter four digits in VIN");
           }
-
         }catch (Exception ex){
           JOptionPane.showMessageDialog(panel, "Please input valid numbers!");
         }
