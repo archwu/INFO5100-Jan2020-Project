@@ -15,7 +15,7 @@ public class ModifyInventory extends JFrame {
 
   public ModifyInventory(Vehicle modifyV) {
     this.modifyV = modifyV;
-    this.dID=modifyV.getDealerId();
+    this.dID = modifyV.getDealerId();
     initialFrame();
   }
 
@@ -38,7 +38,7 @@ public class ModifyInventory extends JFrame {
 
     panel.add(jl);
     String[] jLabelTexts = new String[]{"VehicleId:", "VIN:", "Make:", "Model:", "Year:", "Category:", "Price:",
-            "Color:", "Miles:"};//delete the image button, since db team says the field isn't working
+        "Color:", "Miles:"};//delete the image button, since db team says the field isn't working
 
     JLabel[] jls = new JLabel[9];
     for (int i = 0; i < jls.length; i++) {
@@ -82,6 +82,7 @@ public class ModifyInventory extends JFrame {
     mileageText.setText(Integer.toString(modifyV.getMileage()));
 
     JTextField[] jtfs = new JTextField[]{vehIDText, vinText, makeText, modelText, yearText, priceText, mileageText};
+
     for (int i = 0; i < jtfs.length; i++) {
       jtfs[i].setFont(new Font("Arial", Font.PLAIN, 15));
       panel.add(jtfs[i]);
@@ -139,9 +140,6 @@ public class ModifyInventory extends JFrame {
       new InventoryInformation(dID);
       frame.dispose();
     });
-
-
   }
 }
-
 
