@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.util.Collection;
 import static java.awt.Font.PLAIN;
 
+import static java.awt.Font.PLAIN;
+
 public class InventoryInformation extends JFrame {
   int dID;
   private JTable table;
@@ -73,6 +75,7 @@ public class InventoryInformation extends JFrame {
   }
 
   private void initialFrame() {
+
     JFrame frame = new JFrame("Inventory of Dealer" + this.dID);
     frame.setSize(570, 520);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -110,6 +113,7 @@ public class InventoryInformation extends JFrame {
     btn3.setBounds(80, 380, 160, 40);
     JButton btn4 = new JButton("Back");
     btn4.setBounds(319, 380, 160, 40);
+    
     JButton[] jButtons = new JButton[]{btn1, btn2, btn3, btn4};
     Dimension preferredSize = new Dimension(120, 40);
     for (JButton jButton : jButtons) {
@@ -182,3 +186,4 @@ public class InventoryInformation extends JFrame {
     });
   }
 }
+
