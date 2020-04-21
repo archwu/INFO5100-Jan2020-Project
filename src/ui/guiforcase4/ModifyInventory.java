@@ -56,7 +56,6 @@ public class ModifyInventory extends JFrame {
     JTextField tf2 = new JTextField(10);
     tf2.setBounds(160, 80, 160, 25);
     tf2.setText(Integer.toString(modifyV.getVin()));
-    //tf2.setEditable(false);
     JTextField tf3 = new JTextField(10);
     tf3.setBounds(160, 110, 160, 25);
     tf3.setText(modifyV.getMake());
@@ -72,7 +71,6 @@ public class ModifyInventory extends JFrame {
     JTextField tf6 = new JTextField(10);
     tf6.setBounds(160, 230, 160, 25);
     tf6.setText(Float.toString(modifyV.getPrice()));
-
     JTextField tf7 = new JTextField(10);
     tf7.setBounds(160, 290, 160, 25);
     tf7.setText(Integer.toString(modifyV.getMileage()));
@@ -82,6 +80,25 @@ public class ModifyInventory extends JFrame {
       jtfs[i].setFont(new Font("Arial", Font.PLAIN, 15));
       panel.add(jtfs[i]);
     }
+
+    //Two combobox for color and category
+    JComboBox cmb1 = new JComboBox();
+    cmb1.setBounds(160, 260, 160, 25);
+    cmb1.addItem("White");
+    cmb1.addItem("Red");
+    cmb1.addItem("Gray");
+    cmb1.setSelectedItem(modifyV.getColor());
+    JComboBox cmb2 = new JComboBox();
+    cmb2.setBounds(160, 200, 160, 25);
+    cmb2.addItem("New");
+    cmb2.addItem("Used");
+    cmb2.setSelectedItem(modifyV.getCategory());
+    /*if(cmb2.getSelectedItem()=="Used"){
+      cmb2.setEditable(false);
+    }*/ //Cannot change used vehicles to new
+
+    panel.add(cmb1);
+    panel.add(cmb2);
 
     JButton btn1 = new JButton("Confirm");
     JButton btn2 = new JButton("Back");
@@ -99,13 +116,26 @@ public class ModifyInventory extends JFrame {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         VehicleManagerImpl vmi =new VehicleManagerImpl();
-        modifyV.setVin(Integer.parseInt(tf2.getText()));
-        modifyV.setPrice(Float.parseFloat(tf6.getText()));
-        modifyV.setMileage(Integer.parseInt(tf7.getText()));
-        vmi.updateVehicle(modifyV);
-        JOptionPane.showMessageDialog(panel, "Vehicle " + modifyV.getVehicleId() + " has been updated");
-        new InventoryInformation(dID);
-        frame.dispose();
+        try {
+          if(Integer.parseInt(tf2.getText())<10000 & Integer.parseInt(tf2.getText())>0)
+          {
+            modifyV.setVin(Integer.parseInt(tf2.getText()));
+            modifyV.setPrice(Float.parseFloat(tf6.getText()));
+            modifyV.setMileage(Integer.parseInt(tf7.getText()));
+            modifyV.setColor((String) cmb1.getSelectedItem());
+            modifyV.setCategory((String)cmb2.getSelectedItem());
+            vmi.updateVehicle(modifyV);
+            JOptionPane.showMessageDialog(panel, "Vehicle " + modifyV.getVehicleId() + " has been updated");
+            new InventoryInformation(dID);
+            frame.dispose();
+          }
+          else{
+            JOptionPane.showMessageDialog(panel, "Please enter four digits in VIN");
+          }
+
+        }catch (Exception ex){
+          JOptionPane.showMessageDialog(panel, "Please input valid numbers!");
+        }
       }
     });
     btn2.addActionListener(new ActionListener() {
@@ -116,23 +146,6 @@ public class ModifyInventory extends JFrame {
       }
     });
 
-    JComboBox cmb1 = new JComboBox();
-    cmb1.setBounds(160, 260, 160, 25);
-    cmb1.addItem("White");
-    cmb1.addItem("Red");
-    cmb1.addItem("Gray");
-    cmb1.setSelectedItem(modifyV.getColor());
-    JComboBox cmb2 = new JComboBox();
-    cmb2.setBounds(160, 200, 160, 25);
-    cmb2.addItem("New");
-    cmb2.addItem("Used");
-    cmb2.setSelectedItem(modifyV.getCategory());
-    if(cmb2.getSelectedItem()=="Used"){
-      cmb2.setEditable(false);
-    } //Cannot change used vehicles to new
-
-    panel.add(cmb1);
-    panel.add(cmb2);
 
   }
 }
