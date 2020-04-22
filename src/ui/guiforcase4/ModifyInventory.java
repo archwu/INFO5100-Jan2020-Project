@@ -17,7 +17,7 @@ public class ModifyInventory extends JFrame {
 
   public ModifyInventory(Vehicle modifyV) {
     this.modifyV = modifyV;
-    this.dID=modifyV.getDealerId();
+    this.dID = modifyV.getDealerId();
     initialFrame();
   }
 
