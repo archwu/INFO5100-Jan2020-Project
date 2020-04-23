@@ -207,7 +207,7 @@ public class ModifyInventory extends JFrame {
           }
         }
         //Condition 1: VIN duplicate or not; Condition 2: whether the input is correct or not
-        if (dealerU.validateVin(vinVeh)) {
+        if (!dealerU.validateVin(vinVeh)) {
           if (vinValidateInput(vinText.getText()) && priceValidateInput(priceText.getText())
                   && mileageValidateInput(mileageText.getText())) {
             modifyV.setVin(Integer.parseInt(vinText.getText()));
