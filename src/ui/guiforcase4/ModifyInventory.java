@@ -48,7 +48,7 @@ public class ModifyInventory extends JFrame {
   private void addComponents() {
     JLabel jl = new JLabel("Dealer" + dID);
     jl.setFont(new Font("Arial", Font.PLAIN, 18));
-    jl.setForeground(Color.BLUE);
+    jl.setForeground(Color.BLACK);
     jl.setHorizontalAlignment(JTextField.CENTER);
     jl.setBounds(160, 10, 80, 30);
 
