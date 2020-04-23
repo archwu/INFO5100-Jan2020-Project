@@ -1,8 +1,6 @@
 package ui.guiforcase4;
 
-import dto.Dealer;
 import dto.Vehicle;
-import persist.DealerManagerImpl;
 import persist.VehicleManagerImpl;
 import service.DealerUtilities;
 
@@ -10,8 +8,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +35,7 @@ public class ModifyInventory extends JFrame {
     frame = new JFrame("Modifying Inventory of DealerID " + dID);
     panel = new JPanel(null);
     frame.setSize(570, 480);
+    frame.setLocationRelativeTo(null);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.add(panel);
     addComponents();
@@ -206,10 +203,12 @@ public class ModifyInventory extends JFrame {
             vinVeh = v;
           }
         }
-        //Condition 1: VIN duplicate or not; Condition 2: whether the input is correct or not
-        if (!dealerU.validateVin(vinVeh)) {
-          if (vinValidateInput(vinText.getText()) && priceValidateInput(priceText.getText())
-                  && mileageValidateInput(mileageText.getText())) {
+        //Condition 1: whether the input is correct or not; Condition 2: VIN duplicate or not OR VIN is not changed;
+        if (vinValidateInput(vinText.getText()) && priceValidateInput(priceText.getText())
+                && mileageValidateInput(mileageText.getText()))
+        {
+          if ((Integer.toString(modifyV.getVin()).equals(vinText.getText())) || dealerU.validateVin(vinVeh))
+          {
             modifyV.setVin(Integer.parseInt(vinText.getText()));
             modifyV.setPrice(Float.parseFloat(priceText.getText()));
             modifyV.setMileage(Integer.parseInt(mileageText.getText()));
@@ -217,14 +216,15 @@ public class ModifyInventory extends JFrame {
             modifyV.setCategory((String) categoryText.getSelectedItem());
             vmi.updateVehicle(modifyV);
             JOptionPane.showMessageDialog(panel, "Vehicle " + modifyV.getVehicleId() + " has been updated");
-            new InventoryInformation(dID);
             frame.dispose();
-          } else {
-            JOptionPane.showMessageDialog(panel, "Please check all the input");
+            new InventoryInformation(dID);
+          }
+          else {
+            JOptionPane.showMessageDialog(panel, "Duplicate VIN! Please reenter");
           }
         }
        else{
-          JOptionPane.showMessageDialog(panel, "Duplicate VIN! Please reenter");
+          JOptionPane.showMessageDialog(panel, "Please check all the input");
         }
       }catch (Exception ex){
         JOptionPane.showMessageDialog(panel, "Please input valid numbers!");
