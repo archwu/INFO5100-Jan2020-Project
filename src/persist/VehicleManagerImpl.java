@@ -138,7 +138,7 @@ public class VehicleManagerImpl implements VehicleManager {
             " , Make='" + vehicle.getMake() + "' , Model='" + vehicle.getModel() + "' , Year= " + vehicle.getYear() +
             " , Category = '" + vehicle.getCategory() + "' , Price = " + vehicle.getPrice() + " , Color = '" + vehicle.getColor() +
             "' , Miles = " + vehicle.getMileage() +
-            " WHERE VehicleId=" + vehicle.getVehicleId() +
+            " WHERE VehicleId=" + vehicle.getVehicleId() + " , "+vehicle.getRatings()+
             " ;";
 
     /*Call 'executeQuery' method to run the query*/
