@@ -120,12 +120,12 @@ public class ModifyInventory extends JFrame {
     priceText.setBounds(160, 350, 160, 25);
     priceText.setText(Float.toString(modifyV.getPrice()));
     // Give a hint when having wrong input with Price
-    priceErrorMsg = new JLabel("Price must be positive with one decimal");
+    priceErrorMsg = new JLabel("Price must be non-negative");
     priceErrorMsg.setBounds(160, 368, 250, 25);
     priceErrorMsg.setFont(new Font("Arial", Font.PLAIN, 10));
     priceErrorMsg.setForeground(frame.getBackground());
     panel.add(priceErrorMsg);
-    pricePattern = "\\d+\\.\\d+$";
+    pricePattern = "\\d*(\\.)?\\d*$";
     priceText.getDocument().addDocumentListener(new DocumentListener() {
       @Override
       public void insertUpdate(DocumentEvent documentEvent) {
@@ -179,6 +179,20 @@ public class ModifyInventory extends JFrame {
     categoryText.setBounds(160, 300, 160, 25);
     categoryText.addItem("New");
     categoryText.addItem("Used");
+    /*categoryText.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+          if(categoryText.getSelectedItem().toString().equals("New")) {
+            mileageText.setText("0");
+            mileageText.setEditable(false);
+          }else{
+            mileageText.setText("");
+            mileageText.setEditable(true);
+          }
+        }
+      }
+    });*/
     categoryText.setSelectedItem(modifyV.getCategory());
 
     JComboBox colorText = new JComboBox();
