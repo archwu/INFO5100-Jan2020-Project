@@ -10,15 +10,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import persist.ConnectionToAzureBlob;
 
-public class DealerUtilities {
-
+public class  DealerUtilities {
   public DealerUtilities() {
 
   }
 
   public boolean validateVin(Vehicle vehicle) throws SQLException {
-    String sqlValidationQuery = String.format("SELECT VIN FROM VehicleTable WHERE VIN = '%s' AND DealerID = '%s'", vehicle.getVin(), vehicle.getDealerId());
+    String sqlValidationQuery = String.format("SELECT VIN FROM VehicleTable WHERE VIN = '%s'", vehicle.getVin());
     ConnectionToSql connectionToSql = new ConnectionToSql();
     try (Connection connection = connectionToSql.connectToDB()) {
       ResultSet resultSet = connectionToSql.executeValidation(sqlValidationQuery);

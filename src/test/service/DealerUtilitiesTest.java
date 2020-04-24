@@ -35,7 +35,7 @@ class DealerUtilitiesTest {
     assert !dealerUtilities.validateVin(v);
     assert dealerUtilities.validateVin(v2);
     assert !dealerUtilities.validateVin(v3);
-    assert dealerUtilities.validateVin(v4);
+    assert !dealerUtilities.validateVin(v4);
   }
 
   @Test
@@ -54,8 +54,8 @@ class DealerUtilitiesTest {
 
   @Test
   void testAddImageToAzureBlob(){
-    String testPath = "src\\main\\resources\\CarImages\\1.jpeg";
-    dealerUtilities.addImageToAzureBlob(testPath , 10000);
+//    String testPath = "src\\main\\resources\\CarImages\\1.jpeg";
+//    dealerUtilities.addImageToAzureBlob(testPath , 10000);
   }
 
 //  @Test

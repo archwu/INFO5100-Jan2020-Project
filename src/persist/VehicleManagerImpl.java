@@ -119,11 +119,10 @@ public class VehicleManagerImpl implements VehicleManager {
   @Override
   public Vehicle addVehicle(Vehicle vehicle) {
     String query = "INSERT INTO VehicleTable (VIN , DealerId ,Make , Model , Year , " +
-            "Category , Price , Color , Miles, IncentiveId , DiscountPrice , Ratings) " +
+            "Category , Price , Color , Miles, Ratings) " +
             "VALUES ('"+vehicle.getVin()+"' , "+vehicle.getDealerId()+" , '"+vehicle.getMake()+"' , '"+vehicle.getModel()+
                "' , "+vehicle.getYear()+" , '"+vehicle.getCategory()+"' , "+vehicle.getPrice()+" , '"+vehicle.getColor()+
-               "' , "+vehicle.getMileage()+" , '"+vehicle.getIncentiveId()+
-               "' , "+vehicle.getDiscountPrice()+ " , "+vehicle.getRatings()+
+               "' , "+vehicle.getMileage()+" ,"+vehicle.getRatings()+
                ") ;";
 
     /*Call 'executeQuery' method to run the query*/
@@ -152,7 +151,7 @@ public class VehicleManagerImpl implements VehicleManager {
     String query = "DELETE FROM VehicleTable WHERE VehicleId = " + vehicle.getVehicleId() + " ;";
 
     /*Call 'executeQuery' method to run the query*/
-    ArrayList<ArrayList> result = connect.executeVehicleQuery(query, "UPDATE");
+    ArrayList<ArrayList> result = connect.executeVehicleQuery(query, "DELETE");
     return vehicle;
   }
 
@@ -167,15 +166,15 @@ public class VehicleManagerImpl implements VehicleManager {
       v.setVehicleId((Integer) temp.get(0));
       v.setVin((Integer) temp.get(1));
       v.setDealerId((Integer) temp.get(2));
-      v.setMake(temp.get(3).toString());
-      v.setModel(temp.get(4).toString());
+      v.setMake((String)temp.get(3));
+      v.setModel((String)temp.get(4));
       v.setYear((Integer) temp.get(5));
-      v.setCategory(temp.get(6).toString());
+      v.setCategory((String)temp.get(6));
       v.setPrice((Float) temp.get(7));
       v.setColor(temp.get(8).toString());
       v.setMileage((Integer) temp.get(9));
       //v.setImage((Image) temp.get(10));
-      v.setIncentiveId(temp.get(11).toString());
+      v.setIncentiveId((String)temp.get(11));
       v.setDiscountPrice((Float) temp.get(12));
       v.setRatings((Integer)temp.get(13));
 

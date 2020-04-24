@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 public class ModifyInventory extends JFrame {
   int dID;
   String path;
+  String dealerName;
   Vehicle modifyV;
   DealerUtilities dealerU;
   private JFrame frame;
@@ -32,14 +33,15 @@ public class ModifyInventory extends JFrame {
   private String mileagePattern;
   Map<String,String> colors = ColorJsonPopulator.populateColorContainer();
 
-  public ModifyInventory(Vehicle modifyV) {
+  public ModifyInventory(Vehicle modifyV, int dID, String dealerName) {
     this.modifyV = modifyV;
-    this.dID = modifyV.getDealerId();
+    this.dID = dID;
+    this.dealerName = dealerName;
     initialFrame();
   }
 
   private void initialFrame() {
-    frame = new JFrame("Modifying Inventory of DealerID " + dID);
+    frame = new JFrame("Modifying Vehicles of Dealer " + this.dealerName);
     panel = new JPanel(null);
     frame.setSize(460, 720);
     frame.setLocationRelativeTo(null);
@@ -50,11 +52,11 @@ public class ModifyInventory extends JFrame {
   }
 
   private void addComponents() {
-    JLabel jl = new JLabel("Dealer" + dID);
+    JLabel jl = new JLabel(this.dealerName);
     jl.setFont(new Font("Arial", Font.PLAIN, 18));
     jl.setForeground(Color.BLACK);
-    jl.setHorizontalAlignment(JTextField.CENTER);
-    jl.setBounds(160, 10, 80, 30);
+    jl.setHorizontalAlignment(SwingConstants.CENTER);
+    jl.setBounds(0, 10, 570, 30);
 
     panel.add(jl);
     String[] jLabelTexts = new String[]{"VehicleId:", "VIN:", "Make:", "Model:", "Year:", "Category:", "Price:",
@@ -294,7 +296,7 @@ public class ModifyInventory extends JFrame {
             }
             JOptionPane.showMessageDialog(panel, "Vehicle " + modifyV.getVehicleId() + " has been updated");
             frame.dispose();
-            new InventoryInformation(dID);
+            new InventoryInformation(dID, dealerName);
           }
           else {
             JOptionPane.showMessageDialog(panel, "Duplicate VIN! Please reenter");
@@ -310,7 +312,7 @@ public class ModifyInventory extends JFrame {
 
     //back button actionListener
     backBtn.addActionListener(e -> {
-      new InventoryInformation(dID);
+      new InventoryInformation(dID, dealerName);
       frame.dispose();
     });
   }
