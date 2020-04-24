@@ -11,8 +11,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -165,10 +163,10 @@ public class ModifyInventory extends JFrame {
     });
 
     //Vehicle Image textField
+    path = "Please select an image";
     JTextField imageText = new JTextField(10);
     imageText.setBounds(160, 550, 160, 25);
-    //imageText.setText(Integer.toString(modifyV.getMileage()));
-
+    imageText.setText(path);
     //Add textField to the panel
     JTextField[] jtfs = new JTextField[]{vehIDText, vinText, makeText, modelText, yearText, priceText, mileageText, imageText};
     for (int i = 0; i < jtfs.length; i++) {
@@ -218,24 +216,21 @@ public class ModifyInventory extends JFrame {
     uploadBtn.setOpaque(true);
     uploadBtn.setFont(new Font("Arial", Font.PLAIN, 12));
     panel.add(uploadBtn);
-    uploadBtn.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
+    uploadBtn.addActionListener(e -> {
+      {
+        JFileChooser fc=new JFileChooser("C:\\");
+        fc.addChoosableFileFilter(new FileNameExtensionFilter(
+                "Image files", ImageIO.getReaderFileSuffixes()));
+        int val=fc.showOpenDialog(null);    //open the file selection window
+        if(val==fc.APPROVE_OPTION)
         {
-          JFileChooser fc=new JFileChooser("C:\\");
-          fc.addChoosableFileFilter(new FileNameExtensionFilter(
-                  "Image files", ImageIO.getReaderFileSuffixes()));
-          int val=fc.showOpenDialog(null);    //open the file selection window
-          if(val==fc.APPROVE_OPTION)
-          {
-            imageText.setText(fc.getSelectedFile().toString());
-            path = fc.getSelectedFile().toString();
-          }
-          else
-          {
-            //No selection of images
-            imageText.setText("No image selected");
-          }
+          imageText.setText(fc.getSelectedFile().toString());
+          path = fc.getSelectedFile().toString();
+        }
+        else
+        {
+          //No selection of images
+          imageText.setText("No image selected");
         }
       }
     });
@@ -276,10 +271,13 @@ public class ModifyInventory extends JFrame {
             modifyV.setVin(Integer.parseInt(vinText.getText()));
             modifyV.setPrice(Float.parseFloat(priceText.getText()));
             modifyV.setMileage(Integer.parseInt(mileageText.getText()));
-            modifyV.setColor((String) colorText.getSelectedItem());
+            modifyV.setColor(colorText.getSelectedItem().toString());
             modifyV.setCategory((String) categoryText.getSelectedItem());
             vmi.updateVehicle(modifyV);
-            dealerU.addImageToAzureBlob(path,Integer.parseInt(vinText.getText()));
+            if(!path.equals("Please select an image"))
+            {
+              dealerU.addImageToAzureBlob(path, Integer.parseInt(vinText.getText()));
+            }
             JOptionPane.showMessageDialog(panel, "Vehicle " + modifyV.getVehicleId() + " has been updated");
             frame.dispose();
             new InventoryInformation(dID);
@@ -288,8 +286,8 @@ public class ModifyInventory extends JFrame {
             JOptionPane.showMessageDialog(panel, "Duplicate VIN! Please reenter");
           }
         }
-       else{
-          JOptionPane.showMessageDialog(panel, "Please check all the input");
+       else {
+          JOptionPane.showMessageDialog(panel, "Please check the input");
         }
       }catch (Exception ex){
         JOptionPane.showMessageDialog(panel, "Please input valid numbers!");
